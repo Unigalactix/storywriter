@@ -10,7 +10,7 @@ load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 MODEL_NAME = os.getenv("MODEL_NAME", "gpt-4o-mini")
 TEMPERATURE = float(os.getenv("TEMPERATURE", "0.7"))
-MAX_TOKENS = int(os.getenv("MAX_TOKENS", "2000"))
+MAX_TOKENS = int(os.getenv("MAX_TOKENS", "4000"))  # Increased for longer stories
 
 # Validate API key
 if not OPENAI_API_KEY:
@@ -48,7 +48,16 @@ AGENT_CONFIG = {
 
 # Team Configuration
 TEAM_CONFIG = {
-    "max_messages": 15,
+    "max_messages": 25,  # Increased for longer collaboration
     "allow_repeated_speaker": True,
-    "timeout": 300  # 5 minutes timeout
+    "timeout": 600  # 10 minutes timeout for longer stories
+}
+
+# Story Configuration - Enhanced for 10+ page stories
+STORY_CONFIG = {
+    "target_pages": 10,
+    "words_per_page": 150,  # Typical for children's books
+    "min_total_words": 1500,  # 10 pages * 150 words
+    "chapters": 5,  # Divide story into chapters
+    "collaborative_rounds": 3  # Number of collaboration rounds between agents
 }

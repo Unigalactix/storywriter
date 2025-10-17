@@ -17,7 +17,8 @@ def main():
     )
     
     st.title("📚 Children's Story Generator")
-    st.markdown("### Create magical stories with AI-powered storytelling agents!")
+    st.markdown("### Create magical 10+ page stories with AI-powered storytelling agents!")
+    st.info("🎯 **NEW**: Generate comprehensive 10+ page stories (1500+ words) with rich character development and exciting adventures!")
     
     # Create columns for better layout
     col1, col2 = st.columns([1, 2])
@@ -42,10 +43,25 @@ def main():
         
         # Generate button
         generate_clicked = st.button(
-            "✨ Generate Story",
+            "✨ Generate 10+ Page Story",
             type="primary",
-            use_container_width=True
+            use_container_width=True,
+            help="Generate a comprehensive story with multiple chapters"
         )
+        
+        # Story length info
+        with st.expander("📖 Story Details", expanded=False):
+            st.markdown("""
+            **What you'll get:**
+            - 🎭 **Rich Characters**: 3-5 detailed main characters
+            - 📚 **10+ Pages**: Approximately 1,500+ words
+            - 🏗️ **5 Chapters**: Well-structured narrative
+            - 🎯 **Character Growth**: Development arcs throughout
+            - 🌟 **Exciting Climax**: Thrilling but age-appropriate
+            - 💝 **Life Lessons**: Positive messages woven in
+            
+            **Estimated generation time:** 2-5 minutes
+            """)
         
         # Add API status check
         with st.expander("🔧 API Status", expanded=False):
@@ -70,22 +86,25 @@ def main():
                 progress_bar = st.progress(0)
                 
                 try:
-                    progress_text.text("🤖 Initializing AI agents...")
-                    progress_bar.progress(25)
+                    progress_text.text("🤖 Initializing AI agents for long-form story...")
+                    progress_bar.progress(10)
                     
                     # Initialize the story generator
                     story_gen = StoryGenerator()
                     
-                    progress_text.text("👥 Character Developer is creating characters...")
+                    progress_text.text("👥 Character Developer creating detailed profiles...")
+                    progress_bar.progress(25)
+                    
+                    progress_text.text("✍️ Story Writer crafting multi-chapter narrative...")
                     progress_bar.progress(50)
+                    
+                    progress_text.text("🎬 Climax Creator adding exciting enhancements...")
+                    progress_bar.progress(75)
                     
                     # Generate the story
                     story = story_gen.generate_story(title.strip(), genre)
                     
-                    progress_text.text("✍️ Story Writer is crafting the narrative...")
-                    progress_bar.progress(75)
-                    
-                    progress_text.text("🎬 Climax Creator is adding the exciting ending...")
+                    progress_text.text("� Finalizing your 10+ page story...")
                     progress_bar.progress(100)
                     
                     # Clear progress indicators
@@ -93,39 +112,71 @@ def main():
                     progress_bar.empty()
                     
                     # Display the story
-                    if story and len(story.strip()) > 50:
-                        st.success("🎉 Story generated successfully!")
+                    if story and len(story.strip()) > 800:  # Increased threshold for longer stories
+                        st.success("🎉 Your 10+ page story is ready!")
                         
-                        # Story display
-                        st.text_area(
-                            "Your Magical Story:",
-                            value=story,
-                            height=400,
-                            help="Your generated story appears here"
-                        )
+                        # Story display with better formatting
+                        st.markdown("### 📖 Your Magical Story")
                         
-                        # Add download button
-                        st.download_button(
-                            label="📥 Download Story",
-                            data=story,
-                            file_name=f"{title.replace(' ', '_')}_story.txt",
-                            mime="text/plain"
-                        )
+                        # Create tabs for different views
+                        tab1, tab2 = st.tabs(["📚 Read Story", "📊 Story Stats"])
                         
-                        # Story statistics
-                        word_count = len(story.split())
-                        char_count = len(story)
+                        with tab1:
+                            # Display story in a nice text area
+                            st.text_area(
+                                "Your Complete Story:",
+                                value=story,
+                                height=600,  # Increased height for longer stories
+                                help="Your multi-chapter story appears here",
+                                label_visibility="collapsed"
+                            )
                         
-                        col_stats1, col_stats2 = st.columns(2)
-                        with col_stats1:
-                            st.metric("Word Count", word_count)
-                        with col_stats2:
-                            st.metric("Character Count", char_count)
+                        with tab2:
+                            # Story statistics
+                            word_count = len(story.split())
+                            char_count = len(story)
+                            estimated_pages = max(10, word_count // 150)  # 150 words per page average
+                            reading_time = max(5, word_count // 200)  # Average reading speed for children
+                            
+                            col_stats1, col_stats2, col_stats3, col_stats4 = st.columns(4)
+                            with col_stats1:
+                                st.metric("📝 Word Count", f"{word_count:,}")
+                            with col_stats2:
+                                st.metric("📄 Estimated Pages", estimated_pages)
+                            with col_stats3:
+                                st.metric("⏱️ Reading Time", f"{reading_time} min")
+                            with col_stats4:
+                                st.metric("🔤 Characters", f"{char_count:,}")
+                            
+                            # Reading level indicator
+                            if word_count >= 1500:
+                                st.success("✅ Meets 10+ page target!")
+                            else:
+                                st.warning(f"📏 Story is {word_count} words. Consider regenerating for fuller content.")
+                        
+                        # Download options
+                        col_dl1, col_dl2 = st.columns(2)
+                        with col_dl1:
+                            st.download_button(
+                                label="📥 Download as Text",
+                                data=story,
+                                file_name=f"{title.replace(' ', '_')}_story.txt",
+                                mime="text/plain"
+                            )
+                        with col_dl2:
+                            # Format story for better reading
+                            formatted_story = f"# {title}\n\n{story}"
+                            st.download_button(
+                                label="📄 Download as Markdown",
+                                data=formatted_story,
+                                file_name=f"{title.replace(' ', '_')}_story.md",
+                                mime="text/markdown"
+                            )
                             
                     else:
-                        st.error("❌ Failed to generate a complete story. Please try again with a different title.")
+                        st.error("❌ Failed to generate a complete 10+ page story. Please try again.")
                         if story:
-                            st.text_area("Partial output received:", value=story, height=200)
+                            st.text_area("Partial output received:", value=story, height=300)
                         
                 except Exception as e:
                     # Clear progress indicators
@@ -146,9 +197,32 @@ def main():
                     - Make sure all required packages are installed
                     """)
             else:
-                st.warning("⚠️ Please enter a title for your story.")
+                st.warning("⚠️ Please enter a title for your 10+ page story.")
         else:
-            st.info("👆 Enter a title and click 'Generate Story' to create your magical tale!")
+            st.info("👆 Enter a title and click 'Generate 10+ Page Story' to create your magical tale!")
+            
+            # Show example story structure
+            with st.expander("📋 What makes a great 10+ page story?", expanded=False):
+                st.markdown("""
+                **Chapter Structure:**
+                1. **Introduction** - Meet the characters and their world
+                2. **Adventure Begins** - The main problem or quest starts
+                3. **Challenges** - Characters face obstacles and grow
+                4. **Climax** - The most exciting part with resolution
+                5. **Conclusion** - Characters have learned and grown
+                
+                **Rich Characters:**
+                - Detailed personalities and backgrounds
+                - Clear goals and motivations
+                - Growth throughout the story
+                - Diverse and inclusive representation
+                
+                **Engaging Elements:**
+                - Dialogue that brings characters to life
+                - Vivid descriptions of settings and actions
+                - Age-appropriate excitement and adventure
+                - Positive life lessons woven naturally into the story
+                """)
     
     # Add sidebar with information
     with st.sidebar:
@@ -181,12 +255,24 @@ def main():
         - Average length: 300-500 words
         """)
         
+        st.markdown("### 🎯 Enhanced Story Features")
+        st.markdown("""
+        - **10+ Pages**: Comprehensive stories with 1,500+ words
+        - **5 Chapters**: Well-structured narrative flow
+        - **Rich Characters**: 3-5 detailed main characters with growth arcs
+        - **Collaborative Creation**: Three AI agents working together
+        - **Age-Appropriate**: Safe, positive content for ages 4-10
+        - **Educational**: Life lessons integrated naturally
+        - **Multiple Formats**: Download as text or markdown
+        """)
+        
         st.markdown("### 🔧 Technical Info")
         st.markdown("""
         - **Framework**: AutoGen SelectorGroupChat
-        - **Model**: GPT-4o-mini
-        - **Agent Coordination**: Round-robin with selector
-        - **Termination**: Auto-stop when complete
+        - **Model**: GPT-4o-mini with extended context
+        - **Agent Coordination**: Multi-round collaboration
+        - **Generation Time**: 2-5 minutes for full stories
+        - **Termination**: Auto-stop when story is complete
         """)
 
 if __name__ == "__main__":

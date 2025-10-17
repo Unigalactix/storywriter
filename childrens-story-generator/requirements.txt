@@ -5,3 +5,4 @@ autogen-ext[openai]
 python-dotenv
 numpy
 pandas
+nest_asyncio
