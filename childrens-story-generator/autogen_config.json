@@ -1,0 +1,132 @@
+{
+  "name": "children_story_generator",
+  "description": "Multi-agent system for generating children's stories using AutoGen framework",
+  "version": "1.0.0",
+  "agents": [
+    {
+      "name": "Character_Developer",
+      "role": "character_agent",
+      "description": "Develops engaging, age-appropriate characters for children's stories",
+      "system_message": "You are a creative character developer for children's stories. Your role is to: 1. Create engaging, relatable characters appropriate for children aged 4-10, 2. Develop character personalities, appearances, and motivations, 3. Ensure characters are diverse, inclusive, and positive role models, 4. Add character backstories that enhance the plot, 5. Create character relationships and dynamics, 6. Make characters memorable and loveable. Guidelines: Characters should be age-appropriate and inspiring, include diverse backgrounds and abilities, focus on positive traits like kindness, courage, curiosity, avoid scary or inappropriate elements, make characters relatable to children's experiences, keep descriptions vivid but simple. Always respond with detailed character profiles including: Name and basic description, personality traits, special abilities or talents, role in the story, character arc or growth.",
+      "llm_config": {
+        "model": "gpt-4o-mini",
+        "temperature": 0.7,
+        "max_tokens": 2000
+      },
+      "human_input_mode": "NEVER",
+      "max_consecutive_auto_reply": 3
+    },
+    {
+      "name": "Story_Writer",
+      "role": "writer_agent", 
+      "description": "Transforms story plots into complete, engaging children's stories",
+      "system_message": "You are a skilled children's story writer. Your role is to: 1. Transform story plots into engaging, complete stories for children aged 4-10, 2. Write in simple, clear language appropriate for young readers, 3. Create stories with positive messages and life lessons, 4. Include dialogue, action, and descriptive elements, 5. Structure stories with clear beginning, middle, and end, 6. Incorporate characters and plot elements seamlessly, 7. Maintain child-friendly tone throughout. Guidelines: Use vocabulary appropriate for children aged 4-10, keep sentences short and engaging, include moral lessons naturally within the story, avoid scary, violent, or inappropriate content, use repetition and rhythm to make stories memorable, create vivid but simple descriptions, include emotional connections children can relate to, aim for stories that are 300-500 words long. Always write complete, engaging stories that captivate young readers while teaching valuable life lessons.",
+      "llm_config": {
+        "model": "gpt-4o-mini",
+        "temperature": 0.7,
+        "max_tokens": 2000
+      },
+      "human_input_mode": "NEVER",
+      "max_consecutive_auto_reply": 3
+    },
+    {
+      "name": "Climax_Creator",
+      "role": "climax_agent",
+      "description": "Creates exciting but age-appropriate climaxes for children's stories",
+      "system_message": "You are a master of creating exciting climaxes for children's stories. Your role is to: 1. Develop thrilling but age-appropriate climactic moments, 2. Create tension and excitement suitable for children aged 4-10, 3. Ensure climaxes lead to satisfying resolutions, 4. Build emotional peaks that engage young readers, 5. Incorporate character growth and lesson learning, 6. Balance excitement with safety and positivity, 7. Create memorable turning points in stories. Guidelines: Keep excitement age-appropriate (no scary or violent content), focus on problem-solving, friendship, and courage, create moments where characters overcome challenges, include emotional satisfaction and character growth, build suspense through anticipation, not fear, ensure climaxes support the story's moral lesson, make climaxes relatable to children's experiences, create 'wow' moments that children will remember. Always create climaxes that: resolve the main conflict positively, show characters using their strengths, teach valuable life lessons, leave children feeling empowered and happy.",
+      "llm_config": {
+        "model": "gpt-4o-mini",
+        "temperature": 0.7,
+        "max_tokens": 2000
+      },
+      "human_input_mode": "NEVER",
+      "max_consecutive_auto_reply": 3
+    }
+  ],
+  "group_chat_config": {
+    "max_round": 10,
+    "speaker_selection_method": "round_robin",
+    "allow_repeat_speaker": false
+  },
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "agent": "Character_Developer",
+        "action": "Create 2-3 engaging characters based on the story title and genre"
+      },
+      {
+        "step": 2,
+        "agent": "Story_Writer", 
+        "action": "Write a complete story using the characters, incorporating the title and genre"
+      },
+      {
+        "step": 3,
+        "agent": "Climax_Creator",
+        "action": "Enhance the story with an exciting climax and satisfying resolution"
+      }
+    ]
+  },
+  "input_parameters": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "description": "The title of the story to be generated"
+    },
+    "genre": {
+      "type": "string",
+      "required": true,
+      "enum": ["Fantasy", "Adventure", "Fairy Tale", "Science Fiction", "Mystery", "Animal Story", "Friendship", "Educational"],
+      "description": "The genre of the story to be generated"
+    }
+  },
+  "output_format": {
+    "type": "string",
+    "description": "A complete children's story with characters, plot, and climax suitable for ages 4-10"
+  },
+  "api_configuration": {
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "temperature": 0.7,
+    "max_tokens": 2000,
+    "api_key_env_var": "OPENAI_API_KEY"
+  },
+  "user_interface": {
+    "type": "streamlit",
+    "components": [
+      {
+        "type": "text_input",
+        "label": "Story Title",
+        "placeholder": "Enter an exciting title for your story...",
+        "required": true
+      },
+      {
+        "type": "selectbox",
+        "label": "Genre",
+        "options": ["Fantasy", "Adventure", "Fairy Tale", "Science Fiction", "Mystery", "Animal Story", "Friendship", "Educational"],
+        "default": "Fantasy"
+      },
+      {
+        "type": "button",
+        "label": "Generate Story",
+        "action": "trigger_story_generation"
+      },
+      {
+        "type": "text_area",
+        "label": "Generated Story",
+        "readonly": true,
+        "height": 400
+      }
+    ]
+  },
+  "features": [
+    "Multi-agent collaboration",
+    "Age-appropriate content (4-10 years)",
+    "Positive moral lessons",
+    "Diverse and inclusive characters",
+    "Interactive web interface",
+    "Story download functionality",
+    "Multiple genre support",
+    "Real-time generation"
+  ]
+}
