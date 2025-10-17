@@ -1,6 +1,7 @@
 ﻿streamlit
 openai
-pyautogen
+autogen-agentchat
+autogen-ext[openai]
 python-dotenv
 numpy
 pandas

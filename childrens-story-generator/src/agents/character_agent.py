@@ -1,12 +1,23 @@
-import autogen
+from autogen_agentchat.agents import AssistantAgent
+from autogen_ext.models.openai import OpenAIChatCompletionClient
 from config import LLM_CONFIG
 
 class CharacterAgent:
     """Agent responsible for developing characters for children's stories"""
     
     def __init__(self):
-        self.agent = autogen.AssistantAgent(
+        # Create model client
+        self.model_client = OpenAIChatCompletionClient(
+            model=LLM_CONFIG["model"],
+            api_key=LLM_CONFIG["api_key"],
+            temperature=LLM_CONFIG["temperature"],
+            max_tokens=LLM_CONFIG["max_tokens"]
+        )
+        
+        self.agent = AssistantAgent(
             name="Character_Developer",
+            description="Creates engaging, age-appropriate characters for children's stories with diverse backgrounds and positive traits",
+            model_client=self.model_client,
             system_message="""You are a creative character developer for children's stories. Your role is to:
 
 1. Create engaging, relatable characters appropriate for children aged 4-10
@@ -30,8 +41,6 @@ Always respond with detailed character profiles including:
 - Special abilities or talents
 - Role in the story
 - Character arc or growth""",
-            llm_config=LLM_CONFIG,
-            human_input_mode="NEVER",
         )
     
     def get_agent(self):

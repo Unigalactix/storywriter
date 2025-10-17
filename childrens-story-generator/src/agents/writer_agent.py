@@ -1,12 +1,23 @@
-import autogen
+from autogen_agentchat.agents import AssistantAgent
+from autogen_ext.models.openai import OpenAIChatCompletionClient
 from config import LLM_CONFIG
 
 class WriterAgent:
     """Agent responsible for writing the complete children's story"""
     
     def __init__(self):
-        self.agent = autogen.AssistantAgent(
+        # Create model client
+        self.model_client = OpenAIChatCompletionClient(
+            model=LLM_CONFIG["model"],
+            api_key=LLM_CONFIG["api_key"],
+            temperature=LLM_CONFIG["temperature"],
+            max_tokens=LLM_CONFIG["max_tokens"]
+        )
+        
+        self.agent = AssistantAgent(
             name="Story_Writer",
+            description="Transforms story plots into engaging, complete stories for children aged 4-10 with positive messages",
+            model_client=self.model_client,
             system_message="""You are a skilled children's story writer. Your role is to:
 
 1. Transform story plots into engaging, complete stories for children aged 4-10
@@ -28,8 +39,6 @@ Guidelines:
 - Aim for stories that are 300-500 words long
 
 Always write complete, engaging stories that captivate young readers while teaching valuable life lessons.""",
-            llm_config=LLM_CONFIG,
-            human_input_mode="NEVER",
         )
     
     def get_agent(self):

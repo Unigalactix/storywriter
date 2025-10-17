@@ -1,12 +1,23 @@
-import autogen
+from autogen_agentchat.agents import AssistantAgent
+from autogen_ext.models.openai import OpenAIChatCompletionClient
 from config import LLM_CONFIG
 
 class ClimaxAgent:
     """Agent responsible for creating exciting climaxes for children's stories"""
     
     def __init__(self):
-        self.agent = autogen.AssistantAgent(
+        # Create model client
+        self.model_client = OpenAIChatCompletionClient(
+            model=LLM_CONFIG["model"],
+            api_key=LLM_CONFIG["api_key"],
+            temperature=LLM_CONFIG["temperature"],
+            max_tokens=LLM_CONFIG["max_tokens"]
+        )
+        
+        self.agent = AssistantAgent(
             name="Climax_Creator",
+            description="Creates exciting but age-appropriate climaxes and satisfying resolutions for children's stories",
+            model_client=self.model_client,
             system_message="""You are a master of creating exciting climaxes for children's stories. Your role is to:
 
 1. Develop thrilling but age-appropriate climactic moments
@@ -32,8 +43,6 @@ Always create climaxes that:
 - Show characters using their strengths
 - Teach valuable life lessons
 - Leave children feeling empowered and happy""",
-            llm_config=LLM_CONFIG,
-            human_input_mode="NEVER",
         )
     
     def get_agent(self):
